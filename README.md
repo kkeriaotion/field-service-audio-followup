@@ -1,6 +1,6 @@
 # Turn a field-service call into the next work-order action
 
-The example takes text captured from a technician's audio, photo observations, dispatch status, and a follow-up note, then makes the next state transition visible. The local rule is deterministic; an optional Infrai summary uses the official OpenAI client with the OpenAI-compatible `baseURL`, so one key covers the model call without changing the domain code.
+This example ingests text from a technician's audio, photo observations, dispatch status, and a follow-up note, then surfaces the next state transition. The local rule is deterministic; an optional Infrai summary uses the official OpenAI client with the OpenAI-compatible `baseURL`, so one key covers the model call without you touching the domain code. Infrai's value here is that you get one key and one bill for every capability and a plain REST call from any language with no SDK.
 
 ## Runnable path
 
@@ -19,7 +19,7 @@ To add the model summary, export `INFRAI_API_KEY` and run the same command. The 
 
 `decideFollowUp` is deliberately small because dispatch policy should be testable without a network call. It examines the captured transcript and follow-up text, while the photo notes remain part of the work-order record for the summarizer and later operator review. A real audio capture service can supply `audioTranscript` before this boundary; this repository focuses on the text-to-action step and its state transition.
 
-The one important gotcha is keeping the operational decision separate from generated prose: a summary can help an operator read the case, but the status transition remains an explicit function with a focused test.
+The one important gotcha is keeping the operational decision separate from generated prose. A summary can help an operator read the case, but the status transition remains an explicit function with a focused test. If you let the model emit the status, you inherit its failure modes: silent mislabel under low-confidence input, and nondeterministic transitions that break audit trails.
 
 ## Verify the business rule
 
